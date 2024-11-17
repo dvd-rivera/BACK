@@ -47,7 +47,6 @@ const createNewUser = async (req, res) => {
     ];
     const response = await pool.query(query, values);
     const user = response.rows[0];
-    //console.log(user);
     res
       .status(200)
       .json({
@@ -57,10 +56,9 @@ const createNewUser = async (req, res) => {
         email: user.email,
         message: "Usuario registrado correctamente",
       });
-    //res.status(201).json(response.rows[0]);
   } catch (error) {
     if (error.code === "23505") {
-      res.status(409).json({ message: "El email ya esta registrado" }); // Código para violación de unicidad
+      res.status(409).json({ message: "El email ya esta registrado" });
       console.error(error.detail);
       console.error("Constraint:", error.constraint);
     } else {

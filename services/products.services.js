@@ -28,7 +28,6 @@ WHERE p.id = $1`;
         code: 404,
       });
     }
-    /// response.rows[0] para devolver el unico objeto
     res.status(200).json(response.rows[0]);
   } catch (error) {
     console.log(error);
@@ -60,7 +59,6 @@ LEFT JOIN theme th ON p.theme_id = th.id`;
     const response = size
       ? await pool.query(query, [size])
       : await pool.query(query);
-    //const response = await pool.query(query);
     if (!response.rows.length) {
       return res.status(404).json({
         message: "Producto no existe",

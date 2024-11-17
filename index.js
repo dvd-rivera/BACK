@@ -22,3 +22,5 @@ app.listen(port, (req, res) => {
   console.log(`Server is running on port ${port}`);
   console.log("http://localhost:3000");
 });
+
+module.exports = app;
