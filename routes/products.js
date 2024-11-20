@@ -5,6 +5,7 @@ const validateJWT = require("../middleware/auth.handler");
 const {
   schemaProductCreate,
   schemaProductId,
+  schemaProducsByType
 } = require("../schemas/product.schema");
 
 const router = express.Router();
@@ -24,6 +25,15 @@ router.get(
   async (req, res) => {
     const getOneProduct = await productsServices.getOneProduct(req, res);
     return getOneProduct;
+  }
+);
+
+router.get(
+  "/byType/:id",
+  validatorHandler(schemaProducsByType, "params"),
+  async (req, res) => {
+    const getProductsByType = await productsServices.getProductsByType(req, res);
+    return getProductsByType;
   }
 );
 

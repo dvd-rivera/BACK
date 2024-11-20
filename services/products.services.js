@@ -37,6 +37,42 @@ WHERE p.id = $1`;
   }
 };
 
+const getProductsByType = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const query = `SELECT 
+    p.id AS product_id,
+    p.description,
+    p.price,
+    p.stock,
+    p.other_attributes,
+    p.img,
+    t.name AS type_name,
+    th.name AS theme_name
+FROM 
+    products p
+LEFT JOIN 
+    type t ON p.type_id = t.id
+LEFT JOIN 
+    theme th ON p.theme_id = th.id
+WHERE 
+    t.id = $1;`;
+    const response = await pool.query(query, [id]);
+    if (!response.rows.length) {
+      return res.status(404).json({
+        message: "No hay productos de este tipo",
+        code: 404,
+      });
+    }
+    res.status(200).json(response.rows);
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Ocurrió un error al obtener productos por tipo" });
+  }
+};
+
 const getAllProducts = async (req, res) => {
   try {
     const { size } = req.query;
@@ -116,4 +152,5 @@ module.exports = {
   getOneProduct,
   getAllProducts,
   createNewProduct,
+  getProductsByType
 };

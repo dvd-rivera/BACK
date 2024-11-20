@@ -20,10 +20,16 @@ const schemaProductCreate = Joi.object({
 });
 
 const schemaProductId = Joi.object({
-  id: id.required(),
+  id: id.required()
 });
+
+const schemaProducsByType = Joi.object({
+  id: id.required()
+});
+
 
 module.exports = {
   schemaProductCreate,
   schemaProductId,
+  schemaProducsByType
 };
