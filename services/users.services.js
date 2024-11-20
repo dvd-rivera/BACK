@@ -47,15 +47,13 @@ const createNewUser = async (req, res) => {
     ];
     const response = await pool.query(query, values);
     const user = response.rows[0];
-    res
-      .status(200)
-      .json({
-        id: user.userid,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        message: "Usuario registrado correctamente",
-      });
+    res.status(200).json({
+      id: user.userid,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      message: "Usuario registrado correctamente",
+    });
   } catch (error) {
     if (error.code === "23505") {
       res.status(409).json({ message: "El email ya esta registrado" });
@@ -97,7 +95,13 @@ const userLogin = async (req, res) => {
     );
     res
       .status(200)
-      .json({ id: user.userid, email: user.email, role: user.role, token });
+      .json({
+        id: user.userid,
+        firstName: user.firstname,
+        email: user.email,
+        role: user.role,
+        token,
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Ocurrió un error al iniciar sesión" });

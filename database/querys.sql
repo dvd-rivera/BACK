@@ -5,6 +5,8 @@ CREATE TABLE type (
     name VARCHAR(50) NOT NULL UNIQUE
 );
 
+SELECT * FROM type;
+
 INSERT INTO type (name) VALUES 
 ('Diary'),
 ('Notebook'),
@@ -16,7 +18,9 @@ INSERT INTO type (name) VALUES
 ('Magnet Calendar'),
 ('Magnetic Fridge'),
 ('Painting'),
-('Resined Painting');
+('Resined Painting'),
+('HappyArt Box');
+
 
 CREATE TABLE theme (
     id SERIAL PRIMARY KEY,
@@ -50,11 +54,13 @@ CREATE TABLE products (
 );
 
 
+
+
 INSERT INTO products (description, price, stock, other_attributes, type_id, theme_id, img) VALUES
-('Diario con diseño de Naruto', 12990, 20, '{"size": "A5", "sheets": 100, "sheet_type": "rayado", "laminate": "mate", "gr": 150}', 21, 13, 'https://www.ecartelera.com/carteles-series/300/380/001_p.jpg'),
-('Cuaderno de dibujo inspirado en Totoro', 9990, 18, '{"size": "A4", "sheets": 50, "sheet_type": "liso", "laminate": "mate", "gr": 80}', 23, 4, 'https://www.ecartelera.com/carteles-series/300/380/001_p.jpg'),
-('Cuaderno con diseño de One Piece', 9990, 30, '{"size": "A4", "sheets": 80, "sheet_type": "liso", "laminate": "mate", "gr": 100}', 22, 2, 'https://www.ecartelera.com/carteles-series/300/380/001_p.jpg'),
-('Diario de Harry Potter con detalles dorados', 13990, 100, '{"size": "A5", "sheets": 120, "sheet_type": "cuadrícula", "laminate": "brillante", "gr": 160}', 21, 1, 'https://www.ecartelera.com/carteles-series/300/380/001_p.jpg');
+('Diario con diseño de Naruto', 12990, 20, '{"size": "A5", "sheets": 100, "sheet_type": "rayado", "laminate": "mate", "gr": 150}', 1, 13, 'https://www.ecartelera.com/carteles-series/300/380/001_p.jpg'),
+('Cuaderno de dibujo inspirado en Totoro', 9990, 18, '{"size": "A4", "sheets": 50, "sheet_type": "liso", "laminate": "mate", "gr": 80}', 2, 4, 'https://www.ecartelera.com/carteles-series/300/380/001_p.jpg'),
+('Cuaderno con diseño de One Piece', 9990, 30, '{"size": "A4", "sheets": 80, "sheet_type": "liso", "laminate": "mate", "gr": 100}', 2, 2, 'https://www.ecartelera.com/carteles-series/300/380/001_p.jpg'),
+('Diario de Harry Potter con detalles dorados', 13990, 100, '{"size": "A5", "sheets": 120, "sheet_type": "cuadrícula", "laminate": "brillante", "gr": 160}', 1, 1, 'https://www.ecartelera.com/carteles-series/300/380/001_p.jpg');
 
 
 CREATE TABLE users (
@@ -75,3 +81,47 @@ INSERT INTO users (firstname, lastname, email, password, phone, addresses, role)
 '+56986351581',
 '[{"tipo": "casa", "direccion": "123 Calle Principal, Santiago"}, {"tipo": "trabajo", "direccion": "456 Avenida Secundaria, Santiago"}]', 
 'admin') RETURNING *;
+
+
+SELECT * FROM users;
+
+SELECT * FROM products;
+
+SELECT * FROM type;
+
+DELETE FROM users where userId = 3;
+
+UPDATE type
+SET name = CASE
+    WHEN name = 'Diary' THEN 'Agendas'
+    WHEN name = 'Notebook' THEN 'Cuadernos'
+    WHEN name = 'Drawing Notebook' THEN 'Cuadernos de Dibujo'
+    WHEN name = 'Keychain Sticky Notes' THEN 'Llaveros con Notas Adhesivas'
+    WHEN name = 'Bookmarks Set' THEN 'Set de Marcapáginas'
+    WHEN name = 'Stickers Set' THEN 'Set de Stickers'
+    WHEN name = 'Wall Calendar' THEN 'Calendarios de Pared'
+    WHEN name = 'Magnet Calendar' THEN 'Calendarios Magnéticos'
+    WHEN name = 'Magnetic Fridge' THEN 'Imánes para el Refri'
+    WHEN name = 'Painting' THEN 'Pinturas'
+    WHEN name = 'Resined Painting' THEN 'Pinturas Resinadas'
+    WHEN name = 'HappyArt Box' THEN 'HappyArt Box'
+    ELSE name -- Mantiene los valores que no coincidan
+END;
+
+SELECT * FROM products;
+
+ALTER TABLE products
+ALTER COLUMN price TYPE INTEGER USING price::INTEGER;
+
+SELECT 
+ p.id AS product_id,
+    p.description,
+    p.price,
+    p.stock,
+    p.other_attributes,
+    p.img,
+    t.name AS type_name,
+    th.name AS theme_name
+FROM products p 
+LEFT JOIN type t ON p.type_id = t.id 
+LEFT JOIN theme th ON p.theme_id = th.id;

@@ -22,8 +22,8 @@ const schemaUserCreate = Joi.object({
 });
 
 const schemaUserLogin = Joi.object({
-  email: email.required(),
-  password: password.required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required(),
 });
 
 module.exports = {

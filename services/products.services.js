@@ -148,9 +148,31 @@ const createNewProduct = async (req, res) => {
   }
 };
 
+const getProductTypes = async (req, res) => {
+  try {
+    let query = "SELECT * FROM type;";
+    const response = await pool.query(query);
+    if (!response) {
+      return res.status(404).json({
+        message: "No hay productos de este tipo",
+        code: 404,
+      });
+    }
+    res.status(200).json(response.rows);
+  } catch (error) {
+    {
+      console.log(error);
+      res.status(500).json({
+        message: "Ocurrió un error al obtener los tipos de productos",
+      });
+    }
+  }
+};
+
 module.exports = {
   getOneProduct,
   getAllProducts,
   createNewProduct,
-  getProductsByType
+  getProductsByType,
+  getProductTypes,
 };
